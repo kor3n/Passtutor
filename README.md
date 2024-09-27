@@ -4,29 +4,24 @@ PassTutor
 **Password Tutor - A tool for remembering passwords... Using your mind :)**
 
 
-Goal/Reason
+Goal
 -----------
 
-I wanted to remember passwords without writing them down or using a password manager
-I looked on the internet and mostly found password managers all over the place
-so I am learning python at the minute and i decided to program the tool in python
+I wanted to remember passwords without writing them down or using a password manager.
 
 
 Running
 -------
 
-* python Passtutor.py -p [password]
-* Optional Arguments are -lT and -n, -lT for how long you get to look at the password in seconds.
-* -n for Incorrect Character Notification. when you get a character wrong, show you which you went wrong on.
-
-usage: Passtutor.py [-h] [-p PASSWORD] [-lT LOOKTIME] [-n]
+* python passtutor.py
 
 
 Requirements
 ------------
 
 * Linux (will add other os's later)
-* python 2.7
+* python 3+
+* `pip intsall -r requirements.txt`
 
 
 Credits
@@ -42,4 +37,4 @@ As for me: [@kor3n](https://twitter.com/#!/kor3n)
 Licence
 -------
 
-GPLv3
+GPL
