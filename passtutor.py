@@ -4,18 +4,17 @@ Password Tutor - A tool for remembering passwords... Using your mind :)
 
 :Authors:
     @kor3n
-:Version: 1.1.1
-:Date: 27/09/2024
+:Version: 1.1.2
+:Date: 23/05/2025
 '''
 # Standard Imports
 import os
+import sys
 import time
 import getpass
+import argparse
 
-# 3rd Party Imports
-from dotenv import load_dotenv, find_dotenv
-
-__version__ = '1.1.1'
+__version__ = '1.1.2'
 
 BANNER: str = f'''
  _____           _______    _
@@ -74,6 +73,20 @@ def call_password(attempt_mode: bool = False, current_password: str = '') -> str
     return getpass.getpass('    > ')
 
 
+def cli_arguments() -> argparse.ArgumentParser:
+    '''cli_arguments
+
+    Gets the arguments form the cli instead of a .env file
+
+    Returns:
+        ArgumentParser: Returns the argument parser to be used within other parts of the script.
+    '''
+    parser: argparse.ArgumentParser = argparse.ArgumentParser()
+    parser.add_argument('-l', '--look-time', help='Set the look time away from the default of 5 seconds', action='store', default=5, type=int)
+    args: argparse.Namespace = parser.parse_args()
+    return args
+
+
 def clear_screen(display_banner: bool = False) -> None:
     '''Clear Screen Function
 
@@ -82,7 +95,11 @@ def clear_screen(display_banner: bool = False) -> None:
     Args:
         display_banner (bool): Do you want to show the banner after the clear.
     '''
-    os.system('clear')
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
+
     if display_banner:
         print(BANNER)
 
@@ -94,8 +111,10 @@ def main() -> None:
     '''
     clear_screen(display_banner=True)
 
+    arguments: argparse.Namespace = cli_arguments()
+
     # Load settings
-    look_timer: int = int(os.getenv('LOOK_TIME'))
+    look_timer: int = arguments.look_time
     incorrect_counter: int = 0
     correct_counter: int = 0
     current_password: str = ''
@@ -105,12 +124,12 @@ def main() -> None:
             print(MENU)
             user_intput: str = str(input('    > ')).lower()
             if user_intput == 'q':
-                exit()
+                sys.exit()
             elif user_intput == 's':
                 clear_screen(display_banner=True)
-                print(f'Correct: {correct_counter}, Incorrect: {incorrect_counter}')
+                print(f'Correct: {correct_counter}, Incorrect: {incorrect_counter}, Look Time: {look_timer}')
             elif user_intput == '1':
-                current_password = call_password()
+                current_password: str | bool = call_password()
                 clear_screen(display_banner=True)
                 print('   [!] - Password Set')
             elif user_intput == '2':
@@ -125,9 +144,8 @@ def main() -> None:
                 clear_screen(display_banner=True)
 
     except KeyboardInterrupt as _:
-        exit()
+        sys.exit()
 
 
 if __name__ == '__main__':
-    load_dotenv(find_dotenv())
     main()
